@@ -19,7 +19,7 @@ const App = () => {
   const adoptedPet = useState(null);
   return (
     <div
-      className="m-0 p-0"
+      className="m-0 min-h-screen p-0"
       style={{
         background: "url(http://pets-images.dev-apis.com/pets/wallpaperA.jpg)",
       }}

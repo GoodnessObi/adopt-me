@@ -35,7 +35,7 @@ const SearchParams = () => {
         }}
       >
         {adoptedPet ? (
-          <div className="pet image-container">
+          <div className="h-[200px] w-[200px] overflow-hidden rounded-[50%]">
             <img src={adoptedPet.images[0]} alt={adoptedPet.name} />
           </div>
         ) : null}
@@ -53,6 +53,7 @@ const SearchParams = () => {
           Animal
           <select
             id="animal"
+            name="animal"
             value={animal}
             className="search-input"
             onChange={(e) => {
