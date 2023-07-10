@@ -1,12 +1,11 @@
 import { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import Modal from "../components/Modal";
 import fetchPet from "../api/fetchPet";
 import Carousel from "../components/Carousel";
-import AdoptedPetContext from "../context/AdoptedPet";
 import ErrorBoundary from "../components/ErrorBoundary";
-import Modal from "../components/Modal";
-import { PetAPIResponse } from "../types/APIResponsesTypes";
+import AdoptedPetContext from "../context/AdoptedPet";
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,7 +17,7 @@ const Details = () => {
   if (!id) {
     throw new Error("no id provided to details");
   }
-  const results = useQuery<PetAPIResponse>(["details", id], fetchPet);
+  const results = useQuery(["details", id], fetchPet);
 
   if (results.isLoading) {
     return (

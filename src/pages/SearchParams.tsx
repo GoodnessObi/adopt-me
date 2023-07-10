@@ -2,19 +2,20 @@ import { useState, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AdoptedPetContext from "../context/AdoptedPet";
 import fetchSearch from "../api/fetchSearch";
-import Results from "../components/Results";
 import useBreedList from "../hooks/UseBreedList";
+import { Animal } from "../types/APIResponsesTypes";
+import Results from "../components/Results";
 
-const animals = ["bird", "cat", "dog", "rabbit", "reptile"];
+const animals: Animal[] = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
   const [adoptedPet] = useContext(AdoptedPetContext);
   const [requestParams, setRequestParams] = useState({
     location: "",
-    animal: "",
+    animal: "" as Animal,
     breed: "",
   });
-  const [animal, setAnimal] = useState("");
+  const [animal, setAnimal] = useState("" as Animal);
   const [breeds] = useBreedList(animal);
   const results = useQuery(["search", requestParams], fetchSearch);
   const pets = results?.data?.pets ?? [];
@@ -23,13 +24,13 @@ const SearchParams = () => {
     <div className="my-0 mx-auto w-11/12">
       <form
         className="mb-10 flex flex-col items-center justify-center rounded-lg bg-gray-200 p-10 shadow-lg"
-        onSubmit={(e) => {
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
-          const formData = new FormData(e.target);
+          const formData = new FormData(e.currentTarget);
           const obj = {
-            animal: formData.get("animal") ?? "",
-            breed: formData.get("breed") ?? "",
-            location: formData.get("location") ?? "",
+            animal: (formData.get("animal")?.toString() as Animal) ?? "",
+            breed: formData.get("breed")?.toString() ?? "",
+            location: formData.get("location")?.toString() ?? "",
           };
           setRequestParams(obj);
         }}
@@ -57,10 +58,10 @@ const SearchParams = () => {
             value={animal}
             className="search-input"
             onChange={(e) => {
-              setAnimal(e.target.value);
+              setAnimal(e.target.value as Animal);
             }}
             onBlur={(e) => {
-              setAnimal(e.target.value);
+              setAnimal(e.target.value as Animal);
             }}
           >
             <option />
