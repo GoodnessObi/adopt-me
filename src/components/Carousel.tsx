@@ -1,6 +1,10 @@
-import { Component } from "react";
+import { Component, MouseEvent } from "react";
 
-class Carousel extends Component {
+interface iProps {
+  images: string[];
+}
+
+class Carousel extends Component<iProps> {
   state = {
     active: 0,
   };
@@ -9,10 +13,16 @@ class Carousel extends Component {
     images: ["http://pets-images.dev-apis.com/pets/none.jpg"],
   };
 
-  handleIndexClick = (event) => {
-    this.setState({
-      active: +event.target.dataset.index,
-    });
+  handleIndexClick = (event: MouseEvent<HTMLImageElement>) => {
+    if (!(event.target instanceof HTMLImageElement)) {
+      return;
+    }
+
+    if (event.target.dataset.index) {
+      this.setState({
+        active: +event.target.dataset.index,
+      });
+    }
   };
 
   render() {

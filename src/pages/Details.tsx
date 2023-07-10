@@ -6,13 +6,19 @@ import Carousel from "../components/Carousel";
 import AdoptedPetContext from "../context/AdoptedPet";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Modal from "../components/Modal";
+import { PetAPIResponse } from "../types/APIResponsesTypes";
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const [, setAdoptedPet] = useContext(AdoptedPetContext);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setAdoptedPet] = useContext(AdoptedPetContext);
   const { id } = useParams();
-  const results = useQuery(["details", id], fetchPet);
+
+  if (!id) {
+    throw new Error("no id provided to details");
+  }
+  const results = useQuery<PetAPIResponse>(["details", id], fetchPet);
 
   if (results.isLoading) {
     return (
@@ -22,7 +28,11 @@ const Details = () => {
     );
   }
 
-  const pet = results.data.pets[0];
+  const pet = results?.data?.pets[0];
+
+  if (!pet) {
+    throw new Error("no pet. lol!");
+  }
 
   return (
     <div className="my-0 mx-auto w-11/12">
@@ -63,10 +73,10 @@ const Details = () => {
   );
 };
 
-export default function DetailsErrorBoundary(props) {
+export default function DetailsErrorBoundary() {
   return (
     <ErrorBoundary>
-      <Details {...props} />
+      <Details />
     </ErrorBoundary>
   );
 }
