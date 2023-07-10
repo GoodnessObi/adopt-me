@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useTransition } from "react";
 import { useQuery } from "@tanstack/react-query";
 import AdoptedPetContext from "../context/AdoptedPet";
 import fetchSearch from "../api/fetchSearch";
@@ -8,6 +8,8 @@ import useBreedList from "../hooks/UseBreedList";
 const animals = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
+const [isPending, startTransition] = useTransition();
+
   const [adoptedPet] = useContext(AdoptedPetContext);
   const [requestParams, setRequestParams] = useState({
     location: "",
@@ -31,7 +33,9 @@ const SearchParams = () => {
             breed: formData.get("breed") ?? "",
             location: formData.get("location") ?? "",
           };
-          setRequestParams(obj);
+          startTransition(() => {
+            setRequestParams(obj);
+          })
         }}
       >
         {adoptedPet ? (
@@ -87,8 +91,11 @@ const SearchParams = () => {
             ))}
           </select>
         </label>
+
+        
         <button className="rounded border-none bg-orange-500 px-6 py-2 text-white hover:opacity-50">
-          Submit
+          { isPending ? ('Loading') : (
+            'Submit')}
         </button>
       </form>
 
