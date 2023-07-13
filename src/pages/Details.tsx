@@ -1,33 +1,34 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { adopt } from "../store/adoptedPetSlice";
 import Modal from "../components/Modal";
-import fetchPet from "../api/fetchPet";
+import { useGetPetQuery } from "../store/petApiService";
+// import fetchPet from "../api/fetchPet";
 import Carousel from "../components/Carousel";
 import ErrorBoundary from "../components/ErrorBoundary";
-import AdoptedPetContext from "../context/AdoptedPet";
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setAdoptedPet] = useContext(AdoptedPetContext);
+  const dispatch = useDispatch();
+
   const { id } = useParams();
 
   if (!id) {
     throw new Error("no id provided to details");
   }
-  const results = useQuery(["details", id], fetchPet);
 
-  if (results.isLoading) {
+  const { isLoading, data: pet } = useGetPetQuery(id);
+
+  if (isLoading) {
     return (
       <div className="loading-pane">
         <h2 className="loader">🐾</h2>
       </div>
     );
   }
-
-  const pet = results?.data?.pets[0];
 
   if (!pet) {
     throw new Error("no pet. lol!");
@@ -56,7 +57,7 @@ const Details = () => {
               <div className="buttons">
                 <button
                   onClick={() => {
-                    setAdoptedPet(pet);
+                    dispatch(adopt(pet));
                     navigate("/");
                   }}
                 >
