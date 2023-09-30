@@ -1,16 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+type searchState = {
+  location: string;
+  breed: string;
+  animal: string;
+};
+
+type searchParamsState = {
+  value: searchState;
+};
+
+const initialState: searchParamsState = {
+  value: {
+    location: "",
+    breed: "",
+    animal: "",
+  },
+};
 
 const searchParamsSlice = createSlice({
   name: "searchParams",
-  initialState: {
-    value: {
-      location: "",
-      breed: "",
-      animal: "",
-    },
-  },
+  initialState,
   reducers: {
-    all: (state, action) => {
+    all: (state, action: PayloadAction<searchState>) => {
       state.value = action.payload;
     },
   },
