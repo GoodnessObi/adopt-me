@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type searchState = {
+export type searchState = {
   location: string;
   breed: string;
   animal: string;

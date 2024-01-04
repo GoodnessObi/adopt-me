@@ -1,23 +1,25 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Animal, Pet } from "../types/APIResponsesTypes";
+import { searchState } from "./searchParamsSlice";
 
 export const petApi = createApi({
   reducerPath: "petApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://pets-v2.dev-apis.com" }),
   endpoints: (builder) => ({
-    getPet: builder.query({
+    getPet: builder.query<Pet, string>({
       query: (id) => ({ url: "pets", params: { id } }),
-      transformResponse: (response) => response.pets[0],
+      transformResponse: (response: { pets: Pet[] }) => response.pets[0],
     }),
-    getBreeds: builder.query({
+    getBreeds: builder.query<Pet[], Animal>({
       query: (animal) => ({ url: "breeds", params: { animal } }),
-      transformResponse: (response) => response.breeds,
+      transformResponse: (response: { breeds: Pet[] }) => response.breeds,
     }),
-    search: builder.query({
+    search: builder.query<Pet[], searchState>({
       query: ({ animal, location, breed }) => ({
         url: "pets",
         params: { animal, location, breed },
       }),
-      transformResponse: (response) => response.pets,
+      transformResponse: (response: { pets: Pet[] }) => response.pets,
     }),
   }),
 });
