@@ -1,8 +1,7 @@
 {
   "name": "adopt-me",
   "version": "1.0.0",
-  "description": "",
-  "requires": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
